@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index of the Interesting / Индекс Интересного</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #faf9f7;
+            --bg-secondary: #f0eeea;
+            --bg-card: #ffffff;
+            --text-primary: #2c2c2c;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            --accent: #8b5a2b;
+            --accent-light: #c4956a;
+            --accent-bg: #f5f0eb;
+            --border: #e0ddd8;
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-hover: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+        header { text-align: center; margin-bottom: 48px; }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.6rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        input[type="password"], input[type="text"], select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-bg);
+        }
+
+        textarea { min-height: 200px; resize: vertical; line-height: 1.7; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .api-key-group { position: relative; }
+
+        .api-key-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .model-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+
+        .badge-top { background: #8b5a2b; color: white; }
+        .badge-mid { background: #4a7c59; color: white; }
+        .badge-fast { background: #2e7d9a; color: white; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #7a4d24;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-primary:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            font-size: 0.95rem;
+        }
+
+        .btn-secondary:hover { background: var(--border); }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .results { display: none; }
+        .results.visible { display: block; animation: fadeIn 0.4s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .index-display {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--accent-bg) 0%, var(--bg-secondary) 100%);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .index-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .index-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .index-category {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 20px;
+            background: var(--accent);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .index-model-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
+
+        .parameters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .param-card {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .param-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .param-name { font-weight: 600; color: var(--text-primary); }
+
+        .param-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .param-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .calculation-box {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .calculation-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .formula {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .interpretation {
+            padding: 24px;
+            background: var(--accent-bg);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+        }
+
+        .interpretation-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .interpretation-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a { color: var(--accent); text-decoration: none; }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 600px) {
+            .form-row, .form-row-3 { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+            .index-value { font-size: 3.5rem; }
+            .lang-switch { position: static; justify-content: center; margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLanguage('ru')">Русский</button>
+            <button class="lang-btn" onclick="setLanguage('en')">English</button>
+        </div>
+
+        <header>
+            <h1 id="title">Индекс Интересного</h1>
+            <p class="subtitle" id="subtitle">Автоматический анализ текстов</p>
+        </header>
+
+        <div class="card">
+            <h2 class="card-title" id="settingsTitle">Настройки</h2>
+            
+            <div class="form-group">
+                <label for="apiKey" id="apiKeyLabel">API-ключ Anthropic</label>
+                <div class="api-key-group">
+                    <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off">
+                    <button class="api-key-toggle" onclick="toggleApiKey()" title="Show/hide">👁</button>
+                </div>
+                <p class="help-text" id="apiKeyHelp">Ключ сохраняется только в вашем браузере.</p>
+            </div>
+
+            <div class="form-row-3">
+                <div class="form-group">
+                    <label for="genre" id="genreLabel">Жанр текста</label>
+                    <select id="genre"></select>
+                </div>
+                <div class="form-group">
+                    <label for="mode" id="modeLabel">Режим оценки</label>
+                    <select id="mode" onchange="toggleContextField()"></select>
+                </div>
+                <div class="form-group">
+                    <label for="model" id="modelLabel">Модель</label>
+                    <select id="model"></select>
+                </div>
+            </div>
+
+            <div class="form-group hidden" id="contextGroup">
+                <label for="context" id="contextLabel">Контекст (автор, год, направление)</label>
+                <input type="text" id="context" placeholder="">
+            </div>
+
+            <div class="form-group">
+                <label for="authorName" id="authorNameLabel">Автор / Произведение (для экспорта)</label>
+                <input type="text" id="authorName" placeholder="">
+                <p class="help-text" id="authorNameHelp">Используется в имени файла при экспорте</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title" id="textTitle">Текст для анализа</h2>
+            <textarea id="textInput" placeholder=""></textarea>
+            <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeText()" style="margin-top: 16px;">
+                <span id="btnText">Анализировать</span>
+                <div class="spinner" id="spinner" style="display: none;"></div>
+            </button>
+        </div>
+
+        <div class="error-message" id="errorMessage" style="display: none;"></div>
+
+        <div class="results" id="results">
+            <div class="card">
+                <h2 class="card-title" id="resultsTitle">Результат анализа</h2>
+                
+                <div class="index-display">
+                    <div class="index-value" id="indexValue">—</div>
+                    <div class="index-label" id="indexLabel">Индекс Интересного</div>
+                    <div class="index-category" id="indexCategory">—</div>
+                    <div class="index-model-info" id="indexModelInfo"></div>
+                </div>
+
+                <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; margin-bottom: 16px;" id="paramsTitle">Оценка параметров</h3>
+                
+                <div class="parameters-grid" id="parametersGrid"></div>
+
+                <div class="calculation-box">
+                    <div class="calculation-title" id="formulaTitle">Формула и расчёт</div>
+                    <div class="formula" id="formulaDisplay">—</div>
+                </div>
+
+                <div class="interpretation">
+                    <div class="interpretation-title" id="interpTitle">Интерпретация</div>
+                    <div class="interpretation-text" id="interpretationText">—</div>
+                </div>
+
+                <button class="btn btn-secondary" id="exportBtn" onclick="exportToDoc()" style="width: 100%; margin-top: 24px;">
+                    📄 <span id="exportText">Экспорт в документ (.doc)</span>
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <p id="footerText">Индекс Интересного разработан <a href="https://urldefense.com/v3/__https://medium.com/noocene__;!!Dq0X2DkFhyF93HkjWTBQKhk!TyODPm4O6ErE_7H25iGDU2feptSpivLadWxt8P5eR2U2dd-TYqln3DvhmBsWAdbNG9gZOrv5qmW1-FZ_aU4rxRQzyLA$" target="_blank">Михаилом Эпштейном</a></p>
+            <p style="margin-top: 8px;"><span id="methodologyText">Методология:</span> <a href="https://urldefense.com/v3/__https://doi.org/10.5281/zenodo.17917134__;!!Dq0X2DkFhyF93HkjWTBQKhk!TyODPm4O6ErE_7H25iGDU2feptSpivLadWxt8P5eR2U2dd-TYqln3DvhmBsWAdbNG9gZOrv5qmW1-FZ_aU4radgWfh0$" target="_blank">Zenodo</a></p>
+        </footer>
+    </div>
+
+    <script>
+        let currentLang = 'ru';
+        let lastAnalysisResult = null;
+
+        const modelOptions = {
+            'claude-opus-4-8': { ru: 'Opus 4.8 — максимум', en: 'Opus 4.8 — maximum', badge: 'top' },
+            'claude-opus-4-6': { ru: 'Opus 4.6 — сильная', en: 'Opus 4.6 — strong', badge: 'mid' },
+            'claude-sonnet-4-6': { ru: 'Sonnet 4.6 — быстрая', en: 'Sonnet 4.6 — fast', badge: 'fast' }
+        };
+
+        const i18n = {
+            ru: {
+                title: 'Индекс Интересного',
+                subtitle: 'Автоматический анализ текстов',
+                settingsTitle: 'Настройки',
+                apiKeyLabel: 'API-ключ Anthropic',
+                apiKeyHelp: 'Ключ сохраняется только в вашем браузере.',
+                genreLabel: 'Жанр текста',
+                modeLabel: 'Режим оценки',
+                modelLabel: 'Модель',
+                contextLabel: 'Контекст (автор, год, направление)',
+                contextPlaceholder: 'напр.: Гоголь, 1842, натуральная школа',
+                authorNameLabel: 'Автор / Произведение (для экспорта)',
+                authorNamePlaceholder: 'напр.: Пушкин, «Евгений Онегин»',
+                authorNameHelp: 'Используется в имени файла при экспорте',
+                textTitle: 'Текст для анализа',
+                textPlaceholder: 'Вставьте текст для анализа...',
+                analyzeBtn: 'Анализировать',
+                analyzing: 'Анализ...',
+                resultsTitle: 'Результат анализа',
+                indexLabel: 'Индекс Интересного',
+                paramsTitle: 'Оценка параметров',
+                formulaTitle: 'Формула и расчет',
+                interpTitle: 'Интерпретация',
+                exportText: 'Экспорт в документ (.doc)',
+                footerText: 'Индекс Интересного разработан',
+                authorCredit: 'Михаилом Эпштейном',
+                methodologyText: 'Методология:',
+                errorNoKey: 'Введите API-ключ',
+                errorNoText: 'Введите текст для анализа',
+                exportFirst: 'Сначала выполните анализ',
+                modeBlind: 'Слепой — только сам текст',
+                modeContext: 'Контекстный — с учетом истории',
+                modelInfoText: 'Модель:',
+                genres: {
+                    aphorism: 'Афоризм',
+                    poetry: 'Поэзия',
+                    essay: 'Эссе / Миниатюра',
+                    article: 'Статья / Академический текст',
+                    story: 'Рассказ / Короткая проза',
+                    novel: 'Роман'
+                },
+                categories: {
+                    masterpiece: 'Шедевр',
+                    excellent: 'Превосходно',
+                    veryGood: 'Очень хорошо',
+                    good: 'Хорошо',
+                    satisfactory: 'Удовлетворительно',
+                    weak: 'Слабо'
+                }
+            },
+            en: {
+                title: 'Index of the Interesting',
+                subtitle: 'Automatic text analysis',
+                settingsTitle: 'Settings',
+                apiKeyLabel: 'Anthropic API Key',
+                apiKeyHelp: 'The key is stored only in your browser.',
+                genreLabel: 'Text genre',
+                modeLabel: 'Evaluation mode',
+                modelLabel: 'Model',
+                contextLabel: 'Context (author, year, movement)',
+                contextPlaceholder: 'e.g.: Gogol, 1842, Natural School',
+                authorNameLabel: 'Author / Work (for export)',
+                authorNamePlaceholder: 'e.g.: Pushkin, "Eugene Onegin"',
+                authorNameHelp: 'Used in the filename when exporting',
+                textTitle: 'Text for analysis',
+                textPlaceholder: 'Paste the text for analysis...',
+                analyzeBtn: 'Analyze',
+                analyzing: 'Analyzing...',
+                resultsTitle: 'Analysis Result',
+                indexLabel: 'Index of the Interesting',
+                paramsTitle: 'Parameter Scores',
+                formulaTitle: 'Formula and Calculation',
+                interpTitle: 'Interpretation',
+                exportText: 'Export to document (.doc)',
+                footerText: 'Index of the Interesting developed by',
+                authorCredit: 'Mikhail Epstein',
+                methodologyText: 'Methodology:',
+                errorNoKey: 'Please enter API key',
+                errorNoText: 'Please enter text for analysis',
+                exportFirst: 'Please run analysis first',
+                modeBlind: 'Blind — text only',
+                modeContext: 'Contextual — with historical context',
+                modelInfoText: 'Model:',
+                genres: {
+                    aphorism: 'Aphorism',
+                    poetry: 'Poetry',
+                    essay: 'Essay / Miniature',
+                    article: 'Article / Academic text',
+                    story: 'Short story / Short prose',
+                    novel: 'Novel'
+                },
+                categories: {
+                    masterpiece: 'Masterpiece',
+                    excellent: 'Excellent',
+                    veryGood: 'Very Good',
+                    good: 'Good',
+                    satisfactory: 'Satisfactory',
+                    weak: 'Weak'
+                }
+            }
+        };
+
+        const genreConfigs = {
+            aphorism: {
+                params: ['A1', 'A2', 'B', 'C'],
+                divisor: 20,
+                formula: (A1, A2, B, M) => `(${A1} + ${A2}) × ${B} / 10 × (1 + ${M}/20)`,
+                paramNames: {
+                    ru: { A1: 'A₁ — Неожиданность', A2: 'A₂ — Воплощение', B: 'B — Достоверность', C: 'C — Межпозиционность' },
+                    en: { A1: 'A₁ — Unexpectedness', A2: 'A₂ — Embodiment', B: 'B — Credibility', C: 'C — Inter-positionality' }
+                }
+            },
+            poetry: {
+                params: ['A1', 'A2', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+                divisor: 60,
+                formula: (A1, A2, B, M) => `(${A1} + ${A2}) × ${B} / 10 × (1 + ${M}/60)`,
+                paramNames: {
+                    ru: { A1: 'A₁ — Неожиданность образа', A2: 'A₂ — Воплощение в образе', B: 'B — Эмоц. достоверность', C: 'C — Суггестивность', D: 'D — Открытость смысла', E: 'E — Композиц. динамика', F: 'F — Резонанс с бытием', G: 'G — Ритмико-звуковая орг.', H: 'H — Интертекстуальность' },
+                    en: { A1: 'A₁ — Image unexpectedness', A2: 'A₂ — Embodiment in imagery', B: 'B — Emotional credibility', C: 'C — Suggestiveness', D: 'D — Openness of meaning', E: 'E — Compositional dynamics', F: 'F — Resonance with being', G: 'G — Rhythmic-sonic org.', H: 'H — Intertextuality' }
+                }
+            },
+            essay: {
+                params: ['A1', 'A2', 'B', 'C', 'D', 'E'],
+                divisor: 30,
+                formula: (A1, A2, B, M) => `(${A1} + ${A2}) × ${B} / 10 × (1 + ${M}/30)`,
+                paramNames: {
+                    ru: { A1: 'A₁ — Неожиданность', A2: 'A₂ — Воплощение', B: 'B — Достоверность', C: 'C — Межпозиционность', D: 'D — Открытость', E: 'E — Ритм' },
+                    en: { A1: 'A₁ — Unexpectedness', A2: 'A₂ — Embodiment', B: 'B — Credibility', C: 'C — Inter-positionality', D: 'D — Openness', E: 'E — Rhythm' }
+                }
+            },
+            article: {
+                params: ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'],
+                divisor: 40,
+                formula: (A1, A2, B, M) => `(${A1} + ${A2}) × ${B} / 10 × (1 + ${M}/40)`,
+                paramNames: {
+                    ru: { A1: 'A₁ — Неожиданность', A2: 'A₂ — Реализация', B: 'B — Достоверность', C: 'C — Межпозиционность', D: 'D — Открытость', E: 'E — Ритм', F: 'F — Резонанс' },
+                    en: { A1: 'A₁ — Unexpectedness', A2: 'A₂ — Realization', B: 'B — Credibility', C: 'C — Inter-positionality', D: 'D — Openness', E: 'E — Rhythm', F: 'F — Resonance' }
+                }
+            },
+            story: {
+                params: ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'],
+                divisor: 40,
+                formula: (A1, A2, B, M) => `(${A1} + ${A2}) × ${B} / 10 × (1 + ${M}/40)`,
+                paramNames: {
+                    ru: { A1: 'A₁ — Неожиданность', A2: 'A₂ — Худож. воплощение', B: 'B — Психол. достоверность', C: 'C — Межпозиционность', D: 'D — Открытость финала', E: 'E — Нарративный ритм', F: 'F — Резонанс' },
+                    en: { A1: 'A₁ — Unexpectedness', A2: 'A₂ — Artistic embodiment', B: 'B — Psychological credibility', C: 'C — Inter-positionality', D: 'D — Openness of ending', E: 'E — Narrative rhythm', F: 'F — Resonance' }
+                }
+            },
+            novel: {
+                params: ['A1', 'A2', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+                divisor: 60,
+                formula: (A1, A2, B, M) => `(${A1} + ${A2}) × ${B} / 10 × (1 + ${M}/60)`,
+                paramNames: {
+                    ru: { A1: 'A₁ — Неожиданность', A2: 'A₂ — Худож. воплощение', B: 'B — Психол. достоверность', C: 'C — Полифония', D: 'D — Открытость', E: 'E — Нарративный ритм', F: 'F — Резонанс', G: 'G — Миротворчество', H: 'H — Архитектоника' },
+                    en: { A1: 'A₁ — Unexpectedness', A2: 'A₂ — Artistic embodiment', B: 'B — Psychological credibility', C: 'C — Polyphony', D: 'D — Openness', E: 'E — Narrative rhythm', F: 'F — Resonance', G: 'G — World-building', H: 'H — Architectonics' }
+                }
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.lang-btn[onclick="setLanguage('${lang}')"]`).classList.add('active');
+            document.documentElement.lang = lang;
+            updateUI();
+        }
+
+        function updateUI() {
+            const t = i18n[currentLang];
+            
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('settingsTitle').textContent = t.settingsTitle;
+            document.getElementById('apiKeyLabel').textContent = t.apiKeyLabel;
+            document.getElementById('apiKeyHelp').textContent = t.apiKeyHelp;
+            document.getElementById('genreLabel').textContent = t.genreLabel;
+            document.getElementById('modeLabel').textContent = t.modeLabel;
+            document.getElementById('modelLabel').textContent = t.modelLabel;
+            document.getElementById('contextLabel').textContent = t.contextLabel;
+            document.getElementById('context').placeholder = t.contextPlaceholder;
+            document.getElementById('authorNameLabel').textContent = t.authorNameLabel;
+            document.getElementById('authorName').placeholder = t.authorNamePlaceholder;
+            document.getElementById('authorNameHelp').textContent = t.authorNameHelp;
+            document.getElementById('textTitle').textContent = t.textTitle;
+            document.getElementById('textInput').placeholder = t.textPlaceholder;
+            document.getElementById('btnText').textContent = t.analyzeBtn;
+            document.getElementById('resultsTitle').textContent = t.resultsTitle;
+            document.getElementById('indexLabel').textContent = t.indexLabel;
+            document.getElementById('paramsTitle').textContent = t.paramsTitle;
+            document.getElementById('formulaTitle').textContent = t.formulaTitle;
+            document.getElementById('interpTitle').textContent = t.interpTitle;
+            document.getElementById('exportText').textContent = t.exportText;
+            document.getElementById('footerText').innerHTML = `${t.footerText} <a href="https://medium.com/noocene" target="_blank">${t.authorCredit}</a>`;
+            document.getElementById('methodologyText').textContent = t.methodologyText;
+
+            // Genre select
+            const genreSelect = document.getElementById('genre');
+            const currentGenre = genreSelect.value || 'article';
+            genreSelect.innerHTML = '';
+            Object.keys(t.genres).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = t.genres[key];
+                if (key === currentGenre) option.selected = true;
+                genreSelect.appendChild(option);
+            });
+
+            // Mode select
+            const modeSelect = document.getElementById('mode');
+            const currentMode = modeSelect.value || 'blind';
+            modeSelect.innerHTML = `
+                <option value="blind" ${currentMode === 'blind' ? 'selected' : ''}>${t.modeBlind}</option>
+                <option value="context" ${currentMode === 'context' ? 'selected' : ''}>${t.modeContext}</option>
+            `;
+
+            // Model select
+            const modelSelect = document.getElementById('model');
+            const currentModel = modelSelect.value || 'claude-opus-4-8';
+            modelSelect.innerHTML = '';
+            Object.keys(modelOptions).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = modelOptions[key][currentLang];
+                if (key === currentModel) option.selected = true;
+                modelSelect.appendChild(option);
+            });
+        }
+
+        function toggleApiKey() {
+            const input = document.getElementById('apiKey');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function toggleContextField() {
+            const mode = document.getElementById('mode').value;
+            document.getElementById('contextGroup').classList.toggle('hidden', mode !== 'context');
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKey').value;
+            if (key) localStorage.setItem('anthropic_api_key', key);
+        }
+
+        function calculateIndex(genre, params) {
+            const config = genreConfigs[genre];
+            const A1 = params.A1 || 0, A2 = params.A2 || 0, B = params.B || 0;
+            let M = 0;
+            for (const p of ['C', 'D', 'E', 'F', 'G', 'H']) {
+                if (config.params.includes(p)) M += (params[p] || 0);
+            }
+            const index = (A1 + A2) * B / 10 * (1 + M / config.divisor);
+            return { index: index.toFixed(1), calculation: config.formula(A1, A2, B, M) + ` = ${index.toFixed(1)}` };
+        }
+
+        function getCategory(index) {
+            const t = i18n[currentLang].categories;
+            const i = parseFloat(index);
+            if (i >= 28) return { name: t.masterpiece, color: '#8b5a2b' };
+            if (i >= 22) return { name: t.excellent, color: '#4a7c59' };
+            if (i >= 16) return { name: t.veryGood, color: '#2e7d9a' };
+            if (i >= 10) return { name: t.good, color: '#6b7280' };
+            if (i >= 5) return { name: t.satisfactory, color: '#9a7b2e' };
+            return { name: t.weak, color: '#b91c1c' };
+        }
+
+        async function analyzeText() {
+            const t = i18n[currentLang];
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const text = document.getElementById('textInput').value.trim();
+            const genre = document.getElementById('genre').value;
+            const mode = document.getElementById('mode').value;
+            const model = document.getElementById('model').value;
+            const context = document.getElementById('context').value.trim();
+
+            if (!apiKey) { showError(t.errorNoKey); return; }
+            if (!text) { showError(t.errorNoText); return; }
+
+            saveApiKey();
+            hideError();
+            setLoading(true);
+
+            const genreConfig = genreConfigs[genre];
+            const genreName = i18n[currentLang].genres[genre];
+            const paramsList = genreConfig.params.join(', ');
+
+            const modeInstruction = mode === 'blind'
+                ? (currentLang === 'ru' 
+                    ? '\n\nРЕЖИМ: СЛЕПОЙ. Оценивай ТОЛЬКО сам текст. Не пытайся определить автора или эпоху.'
+                    : '\n\nMODE: BLIND. Evaluate ONLY the text itself. Do not try to identify the author or era.')
+                : (currentLang === 'ru'
+                    ? `\n\nРЕЖИМ: КОНТЕКСТНЫЙ. Учитывай историко-литературный контекст. Контекст: ${context || 'не указан'}.`
+                    : `\n\nMODE: CONTEXTUAL. Consider literary-historical context. Context: ${context || 'not specified'}.`);
+
+            const systemPrompt = currentLang === 'ru' 
+                ? `Ты — эксперт по анализу текстов с использованием методологии "Индекс Интересного" Михаила Эпштейна.
+Жанр: ${genreName}. Параметры: ${paramsList}. Каждый параметр оценивается от 1 до 10.${modeInstruction}
+Ответь ТОЛЬКО в формате JSON: {"params": {${genreConfig.params.map(p => `"${p}": число`).join(', ')}}, "explanations": {${genreConfig.params.map(p => `"${p}": "обоснование"`).join(', ')}}, "interpretation": "общая интерпретация"}`
+                : `You are an expert in text analysis using Mikhail Epstein's "Index of the Interesting" methodology.
+Genre: ${genreName}. Parameters: ${paramsList}. Each parameter is scored 1 to 10.${modeInstruction}
+Respond ONLY in JSON format: {"params": {${genreConfig.params.map(p => `"${p}": number`).join(', ')}}, "explanations": {${genreConfig.params.map(p => `"${p}": "justification"`).join(', ')}}, "interpretation": "overall interpretation"}`;
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey,
+                        'anthropic-version': '2023-06-01',
+                        'anthropic-dangerous-direct-browser-access': 'true'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        max_tokens: 2500,
+                        system: systemPrompt,
+                        messages: [{ role: 'user', content: currentLang === 'ru' ? `Проанализируй:\n\n${text}` : `Analyze:\n\n${text}` }]
+                    })
+                });
+
+                if (!response.ok) throw new Error((await response.json()).error?.message || `HTTP ${response.status}`);
+
+                const data = await response.json();
+                const jsonMatch = data.content[0].text.match(/\{[\s\S]*\}/);
+                if (!jsonMatch) throw new Error('Invalid response');
+
+                displayResults(genre, genreConfig, JSON.parse(jsonMatch[0]), model);
+            } catch (error) {
+                showError(`Error: ${error.message}`);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function displayResults(genre, genreConfig, result, model) {
+            const { index, calculation } = calculateIndex(genre, result.params);
+            const category = getCategory(index);
+            const modelLabel = modelOptions[model][currentLang];
+
+            lastAnalysisResult = {
+                index, calculation, category: category.name,
+                params: result.params, explanations: result.explanations, interpretation: result.interpretation,
+                genre, genreName: i18n[currentLang].genres[genre], genreConfig,
+                mode: document.getElementById('mode').value,
+                context: document.getElementById('context').value,
+                authorName: document.getElementById('authorName').value.trim(),
+                model, modelLabel,
+                date: new Date().toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US'),
+                lang: currentLang
+            };
+
+            document.getElementById('indexValue').textContent = index;
+            document.getElementById('indexCategory').textContent = category.name;
+            document.getElementById('indexCategory').style.background = category.color;
+            document.getElementById('formulaDisplay').textContent = calculation;
+            document.getElementById('interpretationText').textContent = result.interpretation;
+            document.getElementById('indexModelInfo').textContent = `${i18n[currentLang].modelInfoText} ${modelLabel}`;
+
+            const grid = document.getElementById('parametersGrid');
+            grid.innerHTML = '';
+            for (const param of genreConfig.params) {
+                const card = document.createElement('div');
+                card.className = 'param-card';
+                card.innerHTML = `
+                    <div class="param-header">
+                        <span class="param-name">${genreConfig.paramNames[currentLang][param]}</span>
+                        <span class="param-value">${result.params[param]}</span>
+                    </div>
+                    <div class="param-description">${result.explanations[param]}</div>
+                `;
+                grid.appendChild(card);
+            }
+
+            document.getElementById('results').classList.add('visible');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function exportToDoc() {
+            if (!lastAnalysisResult) { alert(i18n[currentLang].exportFirst); return; }
+            const r = lastAnalysisResult;
+            const t = i18n[r.lang];
+
+            let paramsHtml = '';
+            for (const param of r.genreConfig.params) {
+                if (r.params[param]) {
+                    paramsHtml += `<tr><td style="padding:8px;border:1px solid #ddd;"><strong>${r.genreConfig.paramNames[r.lang][param]}</strong></td><td style="padding:8px;border:1px solid #ddd;text-align:center;font-size:18px;">${r.params[param]}</td></tr><tr><td colspan="2" style="padding:8px;border:1px solid #ddd;color:#555;font-style:italic;">${r.explanations[param]}</td></tr>`;
+                }
+            }
+
+            const authorLine = r.authorName 
+                ? `<h2 style="text-align:center;color:#555;font-style:italic;margin-top:5px;border:none;">${r.authorName}</h2>` 
+                : '';
+
+            const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>${t.title}${r.authorName ? ' — ' + r.authorName : ''}</title><style>body{font-family:'Times New Roman',serif;max-width:700px;margin:40px auto;line-height:1.6;font-size:12pt}h1{color:#8b5a2b;border-bottom:2px solid #8b5a2b;padding-bottom:10px;text-align:center}h2{color:#8b5a2b;margin-top:30px}.index-box{background:#f5f0eb;padding:20px;text-align:center;margin:20px 0}.index-value{font-size:48px;color:#8b5a2b;font-weight:bold}.index-category{font-size:20px;color:#555}table{width:100%;border-collapse:collapse;margin:20px 0}.meta{color:#888;font-size:10pt;margin-top:40px;border-top:1px solid #ddd;padding-top:10px}</style></head><body><h1>${t.title}</h1>${authorLine}<p>${r.lang === 'ru' ? 'Жанр' : 'Genre'}: ${r.genreName}<br>${r.lang === 'ru' ? 'Режим' : 'Mode'}: ${r.mode === 'blind' ? (r.lang === 'ru' ? 'Слепой' : 'Blind') : (r.lang === 'ru' ? 'Контекстный' : 'Contextual')}${r.context ? '<br>' + (r.lang === 'ru' ? 'Контекст' : 'Context') + ': ' + r.context : ''}<br>${r.lang === 'ru' ? 'Модель' : 'Model'}: ${r.modelLabel}</p><div class="index-box"><div class="index-value">${r.index}</div><div class="index-category">${r.category}</div></div><h2>${t.paramsTitle}</h2><table>${paramsHtml}</table><h2>${t.formulaTitle}</h2><p style="font-family:monospace;background:#f5f5f5;padding:10px;">${r.calculation}</p><h2>${t.interpTitle}</h2><p>${r.interpretation}</p><div class="meta">${r.lang === 'ru' ? 'Дата анализа' : 'Analysis date'}: ${r.date}<br>${t.methodologyText} ${t.title} (${t.authorCredit})</div></body></html>`;
+
+            const blob = new Blob([html], { type: 'application/msword' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            const safeName = r.authorName ? r.authorName.replace(/[^a-zA-Za-яА-Я0-9\s]/g, '').replace(/\s+/g, '_') : '';
+            const dateStr = new Date().toISOString().slice(0, 10);
+            a.download = safeName 
+                ? `${safeName}_Index_${dateStr}.doc` 
+                : `Index_analysis_${dateStr}.doc`;
+            a.click();
+        }
+
+        function setLoading(loading) {
+            const t = i18n[currentLang];
+            document.getElementById('analyzeBtn').disabled = loading;
+            document.getElementById('btnText').textContent = loading ? t.analyzing : t.analyzeBtn;
+            document.getElementById('spinner').style.display = loading ? 'block' : 'none';
+        }
+
+        function showError(msg) {
+            document.getElementById('errorMessage').textContent = msg;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('results').classList.remove('visible');
+        }
+
+        function hideError() { document.getElementById('errorMessage').style.display = 'none'; }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedKey = localStorage.getItem('anthropic_api_key');
+            if (savedKey) document.getElementById('apiKey').value = savedKey;
+            updateUI();
+        });
+    </script>
+</body>
+</html>
